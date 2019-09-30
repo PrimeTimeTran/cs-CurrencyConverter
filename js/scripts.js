@@ -33,7 +33,3 @@ function getConversion(from, to) {
   };
   xhr.send();
 }
-
-function test() {
-  console.log("Updating the input... could we do more?");
-}
