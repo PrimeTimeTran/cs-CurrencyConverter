@@ -1,5 +1,3 @@
-document.getElementById("inputValue").focus();
-
 function formatCurrency(type, value) {
   const formatter = new Intl.NumberFormat(type, {
     currency: type,
@@ -13,6 +11,10 @@ function updateResults(to, conversionRate) {
   const convertedValue = conversionRate * value;
   const formattedCurrency = formatCurrency(to.toUpperCase(), convertedValue);
   document.getElementById("convertedValue").innerHTML = formattedCurrency;
+
+  if (to === 'vnd') {
+    changeCoin(convertedValue)
+  }
 }
 
 function getConversion(from, to) {
@@ -32,4 +34,26 @@ function getConversion(from, to) {
     }
   };
   xhr.send();
+}
+
+const denominations = [500000, 200000, 100000, 50000, 20000, 10000, 5000, 2000, 1000]
+
+function changeCoin(money) {
+  total = money 
+  const bills = {}
+  for(let i = 0; i <= denominations.length; i++) {
+    if (denominations[i] > money) continue
+    if (money >= denominations[i]) {
+      const numberOfNotes = Math.floor(money / denominations[i])
+      bills[denominations[i]] = numberOfNotes
+      money -= denominations[i] * numberOfNotes
+    }
+  }
+  let finalString = ''
+  Object.keys(bills).map((key) => {
+    finalString += `<li>${key} has ${bills[key]} notes</li>`
+  })
+  document.getElementById('total').innerHTML = total
+  document.getElementById('denominations').innerHTML = finalString
+  return bills
 }
